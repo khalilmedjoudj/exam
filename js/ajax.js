@@ -37,4 +37,19 @@ function connecterUtilisateur(email, password) {
     });
 }
 function chargerAnnonces(recherche, wilaya) {
-                                                    
+                                      $.ajax({  
+                                        url: getBaseUrl() + "get_annonces.php",
+                                                type: "GET",
+                                                data: { recherche: recherche  "", wilaya: wilaya  "" },
+                                                success: function (response) {
+                                                              if (response.success) {
+                                                                                afficherAnnonces(response.annonces);
+                                                                            } else {
+                                                                                $(".annonces-grid").html("<p style='text-align:center; padding:50px;'>Erreur de chargement</p>"); }
+        },
+                                                error: function () {
+                                                              $(".annonces-grid").html("<p style='text-align:center; padding:50px;'>Erreur de connexion</p>");
+                                                  }
+    });
+}
+
