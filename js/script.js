@@ -20,12 +20,6 @@
             wrapper.classList.remove("show");
             wrapper.classList.remove("active");
         });
-      }
-    if (closeBtn) {
-        closeBtn.addEventListener("click", () => {
-            wrapper.classList.remove("show");
-            wrapper.classList.remove("active");
-        });
     }
     if (registerLink) {
         registerLink.addEventListener("click", (e) => {
@@ -40,5 +34,6 @@
         });
     }
 });
+
 
 
