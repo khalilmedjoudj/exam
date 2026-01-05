@@ -20,4 +20,25 @@
             wrapper.classList.remove("show");
             wrapper.classList.remove("active");
         });
+      }
+    if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+            wrapper.classList.remove("show");
+            wrapper.classList.remove("active");
+        });
+    }
+    if (registerLink) {
+        registerLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            wrapper.classList.add("active");
+        });
+    }
+    if (loginLink) {
+        loginLink.addEventListener("click", (e) => {
+            e.preventDefault();
+            wrapper.classList.remove("active");
+        });
+    }
+});
+
 
