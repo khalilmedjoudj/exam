@@ -52,4 +52,35 @@ function chargerAnnonces(recherche, wilaya) {
                                                   }
     });
 }
+function afficherAnnonces(annonces) {
+      let html = "";
+      let user = JSON.parse(localStorage.getItem("user"));
+      if (annonces.length === 0) {
+                html = "<p style='text-align:center; padding:50px;'>Aucune annonce trouvée</p>";
+            } else {
+                annonces.forEach(function (annonce) {
+                              let boutonReserver = "";
+                              if (!user || user.type === "client") {
+                                                boutonReserver = <button class="reserve-btn" onclick="reserverAnnonce(${annonce.id})">Réserver</button>;
+                                            }
+                              html += `
+                                              <div class="card">
+                                                                  <div class="card-img">
+                                                                              <img src="${annonce.image_url}" alt="${annonce.titre}">
+                                                                              <span class="status-badge">Disponible</span>
+                                                                              </div>
+                                                                              <div class="card-body">
+                                                                               <span class="category">${annonce.categorie}</span>
+                                                                               <h3>${annonce.titre}</h3>
+                   <p class="res-name"><ion-icon name="business-outline"></ion-icon> ${annonce.restaurant_nom}</p>
+                   <p class="res-loc"><ion-icon name="location-outline"></ion-icon> ${annonce.wilaya}, ${annonce.adresse}</p>
+                   <div class="card-footer">
+                           <span class="date">${formaterDate(annonce.date_creation)}</span>
+                            ${boutonReserver}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+    }
 
