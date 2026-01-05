@@ -12,3 +12,12 @@
                 window.location.href = "ajouter.html";
             } else {
                 openPopup();
+            }
+        });
+    }
+    if (closeBtn) {
+        closeBtn.addEventListener("click", () => {
+            wrapper.classList.remove("show");
+            wrapper.classList.remove("active");
+        });
+
