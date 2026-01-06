@@ -4,3 +4,13 @@
     box-sizing: border-box;
     font-family: 'Poppins',sans-serif;
 }
+body {
+    overflow-x: hidden;
+}
+header {
+    height: 100vh;
+    background: linear-gradient(rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.1)),
+        url("../pic/delicious-ingredients-healthy-salad-copy-space.jpg") center/cover no-repeat;
+    position: relative;
+}
+     
