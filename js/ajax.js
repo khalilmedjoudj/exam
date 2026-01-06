@@ -83,4 +83,30 @@ function afficherAnnonces(annonces) {
             `;
         });
     }
+    $(".annonces-grid").html(html);}
+function reserverAnnonce(annonceId) {
+      let user = JSON.parse(localStorage.getItem("user"));
+      if (!user) {
+                alert("Vous devez être connecté pour réserver.");
+                window.location.href = "index.html";
+                return;}
+      if (user.type !== "client") {
+                alert("Seuls les clients peuvent réserver des plats.");
+                return;}
+      if (!confirm("Voulez-vous réserver ce plat?")) return;
+  $.ajax({url: getBaseUrl() + "reserver.php",type: "POST",data: { user_id: user.id, annonce_id: annonceId }
+     success: function (response) {
+    if (response.success) { alert("Réservation réussie!");
+                           chargerAnnonces();
+                           } else {alert("Erreur: " + response.message);   }
+        },
+  error: function () { alert("Erreur de connexion");}
+    });
+}
+function chargerMesReservations() {let user = JSON.parse(localStorage.getItem("user"));
+                                    if (!user) return;
+            $.ajax({ url: getBaseUrl() + "mes_reservations.php", type: "GET", data: { user_id: user.id },
+                      success: function (response) {
+                     if (response.success) {afficherReservations(response.reservations);}
+                                                    },
 
