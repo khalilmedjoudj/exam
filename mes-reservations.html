@@ -47,3 +47,48 @@
     </nav>
     <section class="annonces-section">
         <div class="container">
+            <h2 class="title-section">Mes Réservations</h2>
+            <div id="message-login" style="display:none;">
+                   <div class="empty-message">
+                    <ion-icon name="log-in-outline"></ion-icon>
+                        <h3>Connexion requise</h3>
+                       <p>Vous devez être connecté pour voir vos réservations</p>
+  <a href="index.html" class="btn"style="display:inline-block; text-decoration:none; padding:15px 40px;">Se connecter</a>
+                        </div>
+                </div>
+            <div id="message-restaurant" style="display:none;">
+                <div class="empty-message">
+                     <ion-icon name="business-outline"></ion-icon>
+                    <h3>Espace Client</h3>
+                    <p>Cette page est réservée aux clients. En tant que restaurant, vous pouvez publier des annonces.
+                    </p>
+                    <a href="ajouter.html" class="btn"
+                        style="display:inline-block; text-decoration:none; padding:15px 40px;">Publier une annonce</a>
+                    </div>
+            </div>
+            <div class="reservations-grid annonces-grid" style="display:none;">
+                <p style="text-align:center; padding:50px;">Chargement de vos réservations...</p>
+                  </div>
+        </div>
+    </section>
+     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script src="js/ajax.js"></script>
+     <script>
+          $(document).ready(function () {
+            let user = JSON.parse(localStorage.getItem("user"));
+            if (!user) {
+                $("#message-login").show();
+                $(".reservations-grid").hide();
+            } else if (user.type === "restaurant") {
+                $("#message-restaurant").show();
+                $(".reservations-grid").hide();
+            } else {
+                $(".reservations-grid").show();
+                chargerMesReservations();
+            }
+            mettreAJourNavbar();
+        });
+    </script>
+</body>
+</html>
+
