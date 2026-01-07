@@ -193,4 +193,230 @@ margin-bottom: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-bottom-left-radius: 20px;
+    cursor: pointer;
+    z-index: 101;
+}
+.form-box h2 {
+    font-size: 2rem;
+    text-align: center;
+    color: #000;
+    margin-bottom: 10px;
+}
+.input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    border-bottom: 2px solid #000;
+    margin: 35px 0;
+}
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    font-size: 1rem;
+    font-weight: 500;
+    transition: 0.3s;
+    pointer-events: none;
+}
+.input-box input:focus~label,
+.input-box input:valid~label {
+    top: -5px;
+    font-size: 0.85rem;
+}
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 0 35px 0 5px;
+}
+.input-box .icon {
+    position: absolute;
+    right: 8px;
+    font-size: 1.2rem;
+    line-height: 55px;
+}
+
+.rem {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin: 20px 0;
+}
+.rem label input {
+    accent-color: forestgreen;
+    margin-right: 5px;
+}
+.rem a {
+    color: #000;
+    text-decoration: none;
+}
+.rem a:hover {
+    text-decoration: underline;
+} 
+.btn {
+    width: 100%;
+    height: 50px;
+    background: forestgreen;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    color: #fff;
+    font-weight: 600;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+.btn:hover {
+    background: darkgreen;
+}
+.login-register {
+    font-size: 0.95rem;
+    text-align: center;
+    margin-top: 30px; 
+} 
+
+.login-register p a {
+    color: #000;
+    text-decoration: none;
+    font-weight: 700;
+    margin-left: 5px;
+}
+.login-register p a:hover {
+    text-decoration: underline;
+}
+@media (max-width: 768px) {
+    .navbar {
+        padding: 20px 30px;
+    }
+    .center-text h1 {
+        font-size: 2.5rem;
+    }
+    .search-group {
+        flex-direction: column;
+    }
+    .search-box {
+        width: 100%;
+    }
+    .wrapper {
+        width: 90%;
+    }
+
+}
+.annonces-section {
+    padding: 60px 0;
+    min-height: 100vh;
+}
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+.title-section {
+    text-align: center;
+    font-size: 2.2rem;
+    color: #222;
+    margin-bottom: 40px;
+    position: relative;
+}
+.annonces-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    justify-content: center;
+}
+
+.card {
+    background: #fff;
+    border-radius:20px;
+    overflow: hidden;
+    box-shadow: 0 12px 4àpx rgba(0, 0, 0, 0.05);
+    transition: all 0/.3s ease;
+    border: 1px solid #eee;
+}
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 30px rgba(0, 0, 0, 0.1);
+}
+.card img {
+    position: relative;
+    height: 200px;
+    width: 100%;
+}
+.card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.status-badge {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: forestgreen;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+.card-body {
+    padding: 20px;
+}
+.category {
+    display: block;
+    color: forestgreen;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+.card-body h3 {
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 15px;
+}
+.res-name,
+.res-loc {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #555;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+}
+.res-name ion-icon,
+.res-loc ion-icon {
+    font-size: 1.1rem;
+    color: seagreen;
+}
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+}
+.date {
+    font-size: 0.8rem;
+    color: #999;
+}
+.reserve-btn {
+    background: forestgreen;
+    color: #fff;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
 }
