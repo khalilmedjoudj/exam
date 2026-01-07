@@ -130,3 +130,41 @@ function afficherReservations(reservations) {
     }
   $(".reservations-grid").html(html);
 }
+function mettreAJourNavbar() {
+    let user = JSON.parse(localStorage.getItem("user"));
+    let menuLinks = `
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="annonces.html">Annonces</a></li>
+    `;
+    if (user) {
+        if (user.type === 'client') {
+            menuLinks += <li><a href="mes-reservations.html">Mes Réservations</a></li>;
+        } else if (user.type === 'restaurant') {
+            menuLinks += `
+                <li><a href="mes-annonces.html">Mes Annonces</a></li>
+                <li><a href="ajouter.html">Publier</a></li>
+            `;
+        }
+    }
+   $(".nav-links ul").html(menuLinks + '<li class="nav-account"></li>');
+    if (user) {
+        let profilHtml = `
+            <div class="profil-dropdown">
+                <button class="login-btn profil-btn">
+                    <ion-icon name="person-circle-outline"></ion-icon> ${user.nom}
+                </button>
+                <div class="profil-menu">
+                    <div class="profil-header">
+                        <ion-icon name="person-circle" style="font-size:3rem; color:forestgreen;"></ion-icon>
+                        <div class="profil-info">
+                            <strong>${user.nom}</strong>
+                            <span>${user.email}</span>
+                            <span class="badge-${user.type}">${user.type === 'restaurant' ? 'Restaurant' : 'Client'}</span>
+                        </div>
+                    </div>
+                    <button class="btn-deconnexion" onclick="deconnexion()">
+                        <ion-icon name="log-out-outline"></ion-icon> Se déconnecter
+                    </button>
+                </div>
+            </div>
+        `;
