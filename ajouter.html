@@ -61,13 +61,13 @@
     <section class="annonces-section">
         <div class="container">
             <h2 class="title-section">Ajouter une Annonce</h2>
-            <div id="message-acces" 
+            <div id="message-acces"
             style="display:none; text-align:center; padding:40px; background:white; border-radius:20px; margin-bottom:30px;">
             <a href="index.html" class="btn"
             style="display:inline-block; text-decoration:none; padding:15px 40px;">Retour à l'accueil</a>
-            <p id="message-text" style="font-size:1.2rem; margin-bottom:20px;"></p>
+            <p id="message-Text" style="font-size:1.2rem; margin-bottom:20px;"></p>
             </div>
-            <div class="form-container" id="form-container" style="display: none;"></div>
+            <div class="form-container" id="form-container" style="display: none;">
             <form  id="form-annonce" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>Titre de plats</label>
@@ -170,8 +170,128 @@
                 </div>
                  <button type="submit" class="btn" id="btn-publier">Publier l'annonce</button>
             </form>
+            </div>
         </div>
     </section>
+     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+     <script src="js/ajax.js"></script>
+     <script>
+        $(document).ready(function () {
+            let user = JSON.parse(localStorage.getItem("user"));
+            if (!user) {
+                $("#message-Text").text("Vous devez être connecté pour ajouter une annonce");
+                $("#message-acces").show();
+                $("#form-container").hide();
+                } else if (user.type !=="restaurant") {
+                $("#message-Text").text("seules les restaurants peuvent ajouter des annonces . Votre compte est de type : " + user.type);
+                $("#message-acces").show();
+                $("#form-container").hide();
+                } else {
+                    $("#message-acces").hide();
+                    $("#form-container").show();
+                }
+                mettreAjourNavbar() ;
+        $(document).on("click", "#upload-box" , function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log("Upload box clicked !");
+            $("#image").trigger("click");
+        });
+        $(document).on("click" , "#image" , function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        });
+        $(document).on("change" , "#image" , function(e) {
+            let file = this.files[0];
+            console.log("File selected : " , file ? file.name : "none");
+            if (file) {
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    $("#preview").attr("src" , e.target.result).show();
+                    $(".upload-icon").hide();
+                    $("#upload-box p").hide();
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+        $("#form-annonce").submit(function(e) {
+            e.preventDefault();
+            let titre = $("#titre").val();
+            let description = $("#description").val();
+            let categorie = $("#categorie").val();
+            let wilaya = $("#wilaya").val();
+            let adresse = $("#adresse").val();
+            let imageFile = $("#image")[0].files[0];
+            if (!titre || !description || !categorie || !wilaya || !adresse || !imageFile) {
+                alert("Veuillez remplir tous les champs obligatoires");
+                return;
+            }
+            $("#btn-publier").text("En cours de publication...").prop("disabled" , true);
+            if (imageFile) {
+                let formData = new FormData();
+                formData.append("image" , imageFile);
+                $.ajax({
+                    url : "php/upload_image.php",
+                    type : "POST",
+                    data : formData,
+                    processData : false,
+                    contentType : false,
+                    success : function(response) {
+                        if (response.success) {
+                            ajouterAnnonceAvecImage(titre, description, categorie, response.image_url, wilaya, adresse);
+                        } else {
+                            alert("Erreur "  + response.message);
+                            $("#btn-publier").text("Publier l'annonce").prop("disabled" , false);
+                        }
+                    }
+                });
+            } else {
+                ajouterAnnonceAvecImage(titre, description, categorie, "pic/no-image.", wilaya, adresse);
+            }
+      });
+      function ajouterAnnonceAvecImage(titre, description, categorie, image_url, wilaya, adresse) {
+        let user = JSON.parse(localStorage.getItem("user"));
+        $.ajax({
+            url : "php/ajouter_annonce.php",
+            type : "POST",
+            data : {
+                titre : titre,
+                description : description,
+                categorie : categorie,
+                image_url : image_url,
+                wilaya : wilaya,
+                adresse : adresse,
+                id_restaurant : user.id
+      },
+      success : function(response) {
+        if (response.success) {
+            alert("Annonce ajoutée avec succès !");
+            window.location.href = "index.html";
+        } else {
+            alert("Erreur lors de l'ajout de l'annonce : " + response.message);
+            $("#btn-publier").text("Publier l'annonce").prop("disabled" , false);
+               }
+            }
+        });
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+                
+
+
+
+            
+            
+
+            
+
+
+        
+     </script>
     
 </body>
 </html>
