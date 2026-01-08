@@ -420,3 +420,223 @@ margin-bottom: 20px;
     cursor: pointer;
     transition: 0.3s;
 }
+
+.reserve-btn:hover {
+    background: darkgreen;
+    transform: scale(1.05);
+}
+@media (max-width: 480px) {
+    .annonces-grid {
+        grid-template-columns: 1fr;
+    }
+    .title-section {
+        font-size: 1.8rem;
+    }
+}
+.search-bar-annonces {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+.search-bar-annonces input,
+.search-bar-annonces select {
+    padding: 12px 20px;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    font-size: 1rem;
+    min-width: 200px;
+}
+.search-bar-annonces input:focus,
+.search-bar-annonces select:focus {
+    border-color: forestgreen;
+    outline: none;
+}
+.form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+.form-group {
+    margin-bottom: 25px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #333;
+}
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: forestgreen;
+    outline: none;
+}
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+.form-row .form-group {
+    flex: 1;
+}
+@media (max-width: 480px) {
+    .form-row {
+        flex-direction: column;
+    }
+    .search-bar-annonces {
+        flex-direction: column;
+    }
+    .search-bar-annonces input,
+    .search-bar-annonces select {
+        width: 100%;
+    }
+}
+.profil-dropdown {
+    position: relative;
+    display: inline-block;
+}
+.profil-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 20px;
+    background: forestgreen;
+    color: white;
+    border: none;
+    border-radius: 50px;
+}
+.profil-btn:hover {
+    background: darkgreen;
+    color: white;
+}
+.profil-btn ion-icon {
+    font-size: 1.4rem;
+}
+.profil-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 280px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    padding: 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    overflow: hidden;
+}
+.profil-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+.profil-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background: linear-gradient(135deg, #f0fff0 0%, #e8f5e9 100%);
+    border-bottom: 1px solid #eee;
+}
+.profil-info {
+    display: flex;
+    flex-direction: column;
+}
+.profil-info strong {
+    font-size: 1rem;
+    color: #222;
+}
+.profil-info span {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+.badge-client {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 2px 10px;
+    background: #2196F3;
+    color: white;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+.badge-restaurant {
+    display: inline-block;
+    margin-top: 5px;
+    padding: 2px 10px;
+    background: forestgreen;
+    color: white;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+.profil-links {
+    padding: 10px 0;
+}
+.profil-links a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: 0.3s;
+}
+.profil-links a:hover {
+    background: #f5f5f5;
+    color: forestgreen;
+}
+.profil-links a ion-icon {
+    font-size: 1.2rem;
+    color: forestgreen;
+}
+.btn-deconnexion {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: calc(100% - 30px);
+    margin: 10px 15px 15px;
+    padding: 12px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.btn-deconnexion:hover {
+    background: #cc0000;
+}
+.btn-deconnexion ion-icon {
+    font-size: 1.2rem;
+}
+.status-pending {
+    background: orange !important;
+}
+.status-confirmed {
+    background: forestgreen !important;
+}
