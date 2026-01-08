@@ -1,0 +1,253 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mes Annonces - BarakaFood</title>
+    <meta name="description" content="Gérez vos annonces publiées sur BarakaFood">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <style>
+        .status-disponible {
+            background: forestgreen !important;
+        }
+        .status-indisponible {
+            background: #999 !important;
+        }
+        .status-reserve {
+            background: orange !important;
+        }
+         .card-stats{
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+         }
+         .card-stats span {
+             font-size: 0.8rem;
+            color: #666;
+         }
+         .card-stats ion-icon{
+            color: forestgreen;
+         }
+         .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+         }
+         .btn-small {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+         }
+          .btn-toggle{
+             background: #2196F3;
+            color: white;
+          }
+            .btn-toggle:hover{
+                background: #1976D2;
+            }
+             .btn-delete{
+                background: #f44336;
+            color: white;
+             }
+             .btn-delete:hover{
+                background: #d32f2f;
+             }
+              .btn-toggle ion-icon,
+        .btn-delete ion-icon {
+            font-size: 1rem;
+        }
+    </style>
+</head>
+<body style="background: #f4f7f6;">
+    <nav class="navbar" style="background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <a href="index.html" class="logo">
+            <ion-icon name="fast-food"></ion-icon> BarakaFood
+        </a>
+        <div class="nav-links">
+            <ul>
+            </ul>
+        </div>
+    </nav>
+    <section class="annonces-section">
+        <div class="container">
+            <h2 class="title-section">Mes Annonces Publiées</h2>
+            <div id="message-acces"
+                style="display:none; text-align:center; padding:40px; background:white; border-radius:20px;">
+                <ion-icon name="business-outline" style="font-size:4rem; color:#ccc;"></ion-icon>
+                <h3 style="margin:20px 0 10px;">Espace Restaurant</h3>
+                <p id="message-text" style="color:#666; margin-bottom:20px;"></p>
+                <a href="index.html" class="btn"
+                    style="display:inline-block; text-decoration:none; padding:15px 40px;">Retour à l'accueil</a>
+            </div>
+            <div id="stats-container" style="display:none; margin-bottom:30px;">
+                <div style="display:flex; gap:20px; justify-content:center; flex-wrap:wrap;">
+                    <div
+                        style="background:white; padding:20px 40px; border-radius:15px; text-align:center; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                        <h3 id="stat-total" style="color:forestgreen; font-size:2rem;">0</h3>
+                        <p style="color:#666;">Annonces publiées</p>
+                    </div>
+                    <div
+                        style="background:white; padding:20px 40px; border-radius:15px; text-align:center; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                        <h3 id="stat-dispo" style="color:forestgreen; font-size:2rem;">0</h3>
+                        <p style="color:#666;">Disponibles</p>
+                    </div>
+                    <div
+                        style="background:white; padding:20px 40px; border-radius:15px; text-align:center; box-shadow:0 5px 15px rgba(0,0,0,0.05);">
+                        <h3 id="stat-reserve" style="color:orange; font-size:2rem;">0</h3>
+                        <p style="color:#666;">Réservées</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mes-annonces-grid annonces-grid" style="display:none;">
+                <p style="text-align:center; padding:50px;">Chargement de vos annonces...</p>
+            </div>
+        </div>
+    </section>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script src="js/ajax.js"></script>
+    <script>
+        $(document).ready(function () {
+            let user = JSON.parse(localStorage.getItem("user"));
+            if (!user) {
+                $("#message-text").text("Vous devez être connecté pour voir vos annonces");
+                $("#message-acces").show();
+            } else if (user.type !== "restaurant") {
+                $("#message-text").text("Cette page est réservée aux restaurants.");
+                $("#message-acces").show();
+            } else {
+                $(".mes-annonces-grid").show();
+                $("#stats-container").show();
+                chargerMesAnnonces();
+            }
+            mettreAJourNavbar();
+        });
+        function chargerMesAnnonces() {
+            let user = JSON.parse(localStorage.getItem("user"));
+            $.ajax({
+                url: "php/mes_annonces.php",
+                type: "GET",
+                data: { user_id: user.id },
+                success: function (response) {
+                    if (response.success) {
+                        afficherMesAnnonces(response.annonces);
+                        let total = response.annonces.length;
+                        let dispo = response.annonces.filter(a => a.statut === 'disponible').length;
+                        let reserve = response.annonces.filter(a => a.statut === 'reserve').length;
+                        $("#stat-total").text(total);
+                        $("#stat-dispo").text(dispo);
+                        $("#stat-reserve").text(reserve);
+                    }
+                },
+                error: function () {
+                    $(".mes-annonces-grid").html("<p style='text-align:center;'>Erreur de chargement</p>");
+                }
+            });
+        }
+        function afficherMesAnnonces(annonces) {
+            let html = "";
+            if (annonces.length === 0) {
+                html = `
+                    <div style="text-align:center; padding:50px; grid-column: 1/-1;">
+                        <ion-icon name="restaurant-outline" style="font-size:4rem; color:#ccc;"></ion-icon>
+                        <h3 style="margin:20px 0;">Aucune annonce publiée</h3>
+                        <a href="ajouter.html" class="btn" style="display:inline-block; text-decoration:none;">Publier ma première annonce</a>
+                    </div>
+                `;
+            } else {
+                annonces.forEach(function (a) {
+                    let statusClass = "status-" + a.statut;
+                    let statusText = a.statut === 'disponible' ? 'Disponible' : (a.statut === 'reserve' ? 'Réservé' : 'Indisponible');
+                    let toggleText = a.statut === 'disponible' ? 'Marquer indisponible' : 'Marquer disponible';
+                    let toggleIcon = a.statut === 'disponible' ? 'close-circle-outline' : 'checkmark-circle-outline';
+                    html += `
+                        <div class="card" data-id="${a.id}">
+                            <div class="card-img">
+                                <img src="${a.image_url}" alt="${a.titre}">
+                                <span class="status-badge ${statusClass}">${statusText}</span>
+                            </div>
+                            <div class="card-body">
+                                <span class="category">${a.categorie}</span>
+                                <h3>${a.titre}</h3>
+                                <p class="res-loc"><ion-icon name="location-outline"></ion-icon> ${a.wilaya}, ${a.adresse}</p>
+                                <div class="card-stats">
+                                    <span><ion-icon name="bookmark-outline"></ion-icon> ${a.nb_reservations} réservation(s)</span>
+                                    <span><ion-icon name="time-outline"></ion-icon> ${formaterDate(a.date_creation)}</span>
+                                </div>
+                                <div class="card-actions">
+                                    <button class="btn-small btn-toggle" onclick="toggleDisponibilite(${a.id}, '${a.statut}')">
+                                        <ion-icon name="${toggleIcon}"></ion-icon> ${toggleText}
+                                    </button>
+                                    <button class="btn-small btn-delete" onclick="supprimerAnnonce(${a.id})">
+                                        <ion-icon name="trash-outline"></ion-icon> Supprimer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            $(".mes-annonces-grid").html(html);
+        }
+        function toggleDisponibilite(annonceId, statutActuel) {
+            let user = JSON.parse(localStorage.getItem("user"));
+            let nouveauStatut = statutActuel === 'disponible' ? 'indisponible' : 'disponible';
+            $.ajax({
+                url: "php/changer_statut.php",
+                type: "POST",
+                data: {
+                    annonce_id: annonceId,
+                    statut: nouveauStatut,
+                    user_id: user.id
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert("Statut mis à jour !");
+                        chargerMesAnnonces(); 
+                    } else {
+                        alert("Erreur: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("Erreur de connexion");
+                }
+            });
+        }
+        function supprimerAnnonce(annonceId) {
+            if (!confirm("Êtes-vous sûr de vouloir supprimer cette annonce ? Cette action est irréversible.")) {
+                return;
+            }
+            let user = JSON.parse(localStorage.getItem("user"));
+            $.ajax({
+                url: "php/supprimer_annonce.php",
+                type: "POST",
+                data: {
+                    annonce_id: annonceId,
+                    user_id: user.id
+                },
+                success: function (response) {
+                    if (response.success) {
+                        alert("Annonce supprimée !");
+                        chargerMesAnnonces(); 
+                    } else {
+                        alert("Erreur: " + response.message);
+                    }
+                },
+                error: function () {
+                    alert("Erreur de connexion");
+                }
+            });
+        }
+    </script>
+    
+</body>
+</html>
