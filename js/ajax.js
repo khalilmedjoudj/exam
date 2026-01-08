@@ -168,3 +168,42 @@ function mettreAJourNavbar() {
                 </div>
             </div>
         `;
+        $(".nav-account").html(profilHtml);
+        $(document).off("click", ".profil-btn").on("click", ".profil-btn", function (e) {
+            e.stopPropagation();
+            $(".profil-menu").toggleClass("show");
+        });
+        $(document).off("click.profil").on("click.profil", function () {
+            $(".profil-menu").removeClass("show");
+        });
+    } else {
+        $(".nav-account").html('<button type="button" class="login-btn">Login</button>');
+        $(document).off("click", ".nav-account .login-btn").on("click", ".nav-account .login-btn", function (e) {
+            e.preventDefault();
+            $(".wrapper").addClass("show");
+        });
+    }
+}
+function deconnexion() {
+    localStorage.removeItem("user");
+    alert("Déconnexion réussie");
+    window.location.href = "index.html";
+}
+function formaterDate(dateString) {
+    let date = new Date(dateString);
+    let maintenant = new Date();
+    let diff = Math.floor((maintenant - date) / 1000 / 60);
+    if (diff < 60) return "Il y a " + diff + " min";
+    if (diff < 1440) return "Il y a " + Math.floor(diff / 60) + "h";
+    return "Il y a " + Math.floor(diff / 1440) + " jour(s)";
+}
+function formaterDateComplete(dateString) {
+    let date = new Date(dateString);
+    return date.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+$(document).ready(function () {
+    mettreAJourNavbar();
+    if ($(".reservations-grid").length > 0) {
+        chargerMesReservations();
+    }
+});
