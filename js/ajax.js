@@ -124,9 +124,7 @@ function afficherReservations(reservations) {
            <span class="date">Réservé le ${formaterDateComplete(res.date_reservation)}</span>
              </div>
                     </div>
-                </div>
-            `;
-        });
+                </div>; });
     }
   $(".reservations-grid").html(html);
 }
@@ -134,18 +132,14 @@ function mettreAJourNavbar() {
     let user = JSON.parse(localStorage.getItem("user"));
     let menuLinks = `
         <li><a href="index.html">Accueil</a></li>
-        <li><a href="annonces.html">Annonces</a></li>
-    `;
+        <li><a href="annonces.html">Annonces</a></li>;
     if (user) {
         if (user.type === 'client') {
             menuLinks += <li><a href="mes-reservations.html">Mes Réservations</a></li>;
         } else if (user.type === 'restaurant') {
             menuLinks += `
                 <li><a href="mes-annonces.html">Mes Annonces</a></li>
-                <li><a href="ajouter.html">Publier</a></li>
-            `;
-        }
-    }
+                <li><a href="ajouter.html">Publier</a></li>;} }
    $(".nav-links ul").html(menuLinks + '<li class="nav-account"></li>');
     if (user) {
         let profilHtml = `
@@ -166,8 +160,7 @@ function mettreAJourNavbar() {
                         <ion-icon name="log-out-outline"></ion-icon> Se déconnecter
                     </button>
                 </div>
-            </div>
-        `;
+            </div>;
         $(".nav-account").html(profilHtml);
         $(document).off("click", ".profil-btn").on("click", ".profil-btn", function (e) {
             e.stopPropagation();
@@ -180,8 +173,7 @@ function mettreAJourNavbar() {
         $(".nav-account").html('<button type="button" class="login-btn">Login</button>');
         $(document).off("click", ".nav-account .login-btn").on("click", ".nav-account .login-btn", function (e) {
             e.preventDefault();
-            $(".wrapper").addClass("show");
-        });
+            $(".wrapper").addClass("show"); });
     }
 }
 function deconnexion() {
@@ -207,3 +199,4 @@ $(document).ready(function () {
         chargerMesReservations();
     }
 });
+
