@@ -27,3 +27,48 @@ function hashPassword($password) {
 function verifyPassword($password, $hash) {
     return password_verify($password, $hash);
 }
+function checkRateLimit($action, $limit = 10, $timeWindow = 60) {
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+    $key = md5($ip . $action);
+    $file = sys_get_temp_dir() . "/rate_limit_$key.txt";
+    $now = time();
+    $requests = [];
+    if (file_exists($file)) {
+        $data = file_get_contents($file);
+        $requests = json_decode($data, true) ?: [];
+    }
+    $requests = array_filter($requests, function($timestamp) use ($now, $timeWindow) {
+        return ($now - $timestamp) < $timeWindow;
+    });
+    if (count($requests) >= $limit) {
+        return false; 
+    }
+    $requests[] = $now;
+    file_put_contents($file, json_encode($requests));
+    return true; 
+}
+function generateCSRFToken() {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    if (empty($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+    return $_SESSION['csrf_token'];
+}
+function verifyCSRFToken($token) {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token);
+}
+function sendSecurityHeaders() {
+    header('X-Frame-Options: DENY');
+    header('X-XSS-Protection: 1; mode=block');
+    header('X-Content-Type-Options: nosniff');
+    header("Content-Security-Policy: default-src 'self' https://unpkg.com https://code.jquery.com https://images.unsplash.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com;");
+    header('Access-Control-Allow-Origin: *');
+    header('Content-Type: application/json; charset=utf-8');
+}
+sendSecurityHeaders();
+?>
