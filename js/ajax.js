@@ -1,55 +1,65 @@
 function getBaseUrl() {
-  let path = window.location.pathname;
-  let baseDir = path.substring(0, path.lastIndexOf('/') + 1);
-  return baseDir + "php/";}
+    let path = window.location.pathname;
+    let baseDir = path.substring(0, path.lastIndexOf('/') + 1);
+    return baseDir + "php/";
+}
 function inscrireUtilisateur(nom, email, password, type) {
-      $.ajax({  url: getBaseUrl() + "inscription.php",type: "POST",data: { nom, email, password, type },
-                      success: function (response) {
-                                    if (response.success) {
-               alert("Inscription réussie! Vous pouvez maintenant vous connecter.");
-                  $(".wrapper").removeClass("show active");
-                                  } else {
-               alert("Erreur: " + response.message);         
-                                }
+    $.ajax({
+        url: getBaseUrl() + "inscription.php", type: "POST", data: { nom, email, password, type },
+        success: function (response) {
+            if (response.success) {
+                alert("Inscription réussie! Vous pouvez maintenant vous connecter.");
+                $(".wrapper").removeClass("show active");
+            } else {
+                alert("Erreur: " + response.message);
+            }
         },
- error: function () {alert("Erreur de connexion au serveur");       }
+        error: function () { alert("Erreur de connexion au serveur"); }
     });
-} 
+}
 function connecterUtilisateur(email, password) {
-      $.ajax({ url: getBaseUrl() + "connexion.php",type: "POST",data: { email, password },
-          success: function (response) {if (response.success) {
-                                           localStorage.setItem("user", JSON.stringify(response.user));
-                                          alert("Bienvenue " + response.user.nom + "!");
-                                           $(".wrapper").removeClass("show");
-                                           location.reload();} else {
-                                                              alert("Erreur: " + response.message); }
+    $.ajax({
+        url: getBaseUrl() + "connexion.php", type: "POST", data: { email, password },
+        success: function (response) {
+            if (response.success) {
+                localStorage.setItem("user", JSON.stringify(response.user));
+                alert("Bienvenue " + response.user.nom + "!");
+                $(".wrapper").removeClass("show");
+                location.reload();
+            } else {
+                alert("Erreur: " + response.message);
+            }
         },
-                error: function () {
-                              alert("Erreur de connexion au serveur"); }
+        error: function () {
+            alert("Erreur de connexion au serveur");
+        }
     });
 }
 function chargerAnnonces(recherche, wilaya) {
-                                      $.ajax({ url: getBaseUrl() + "get_annonces.php", type: "GET", data: { recherche: recherche  "", wilaya: wilaya  "" },
-                                                success: function (response) {
-                                                              if (response.success) {
-                                                                                afficherAnnonces(response.annonces);
-                                                                            } else {
-                                                             $(".annonces-grid").html("<p style='text-align:center; padding:50px;'>Erreur de chargement</p>"); } },
- error: function () {$(".annonces-grid").html("<p style='text-align:center; padding:50px;'>Erreur de connexion</p>");}
+    $.ajax({
+        url: getBaseUrl() + "get_annonces.php", type: "GET", data: { recherche: recherche  "", wilaya: wilaya  "" },
+        success: function (response) {
+            if (response.success) {
+                afficherAnnonces(response.annonces);
+            } else {
+                $(".annonces-grid").html("<p style='text-align:center; padding:50px;'>Erreur de chargement</p>");
+            }
+        },
+        error: function () { $(".annonces-grid").html("<p style='text-align:center; padding:50px;'>Erreur de connexion</p>"); }
     });
 }
 function afficherAnnonces(annonces) {
-      let html = "";
-      let user = JSON.parse(localStorage.getItem("user"));
-      if (annonces.length === 0) {
-                html = "<p style='text-align:center; padding:50px;'>Aucune annonce trouvée</p>";
-            } else {
-                annonces.forEach(function (annonce) {
-                              let boutonReserver = "";
-                              if (!user || user.type === "client") {
-                                                boutonReserver = <button class="reserve-btn" onclick="reserverAnnonce(${annonce.id})">Réserver</button>;
-                                            }
-                              html += `
+    let html = "";
+    let user = JSON.parse(localStorage.getItem("user"));
+    if (annonces.length === 0) {
+        html = "<p style='text-align:center; padding:50px;'>Aucune annonce trouvée</p>";
+    } else {
+        annonces.forEach(function (annonce) {
+            let boutonReserver = "";
+            if (!user || user.type === "client") {
+                boutonReserver = <button class="reserve-btn" onclick="reserverAnnonce(${annonce.id})">Réserver</button>;
+            }
+            html += `
                                               <div class="card">
                                                                   <div class="card-img">
                                                                               <img src="${annonce.image_url}" alt="${annonce.titre}">
@@ -69,52 +79,58 @@ function afficherAnnonces(annonces) {
             `;
         });
     }
-    $(".annonces-grid").html(html);}
+    $(".annonces-grid").html(html);
+}
 function reserverAnnonce(annonceId) {
-      let user = JSON.parse(localStorage.getItem("user"));
-      if (!user) {
-                alert("Vous devez être connecté pour réserver.");
-                window.location.href = "index.html";
-                return;}
-      if (user.type !== "client") {
-                alert("Seuls les clients peuvent réserver des plats.");
-                return;}
-      if (!confirm("Voulez-vous réserver ce plat?")) return;
-  $.ajax({url: getBaseUrl() + "reserver.php",type: "POST",data: { user_id: user.id, annonce_id: annonceId }
+    let user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        alert("Vous devez être connecté pour réserver.");
+        window.location.href = "index.html";
+        return;
+    }
+    if (user.type !== "client") {
+        alert("Seuls les clients peuvent réserver des plats.");
+        return;
+    }
+    if (!confirm("Voulez-vous réserver ce plat?")) return;
+    $.ajax({
+        url: getBaseUrl() + "reserver.php", type: "POST", data: { user_id: user.id, annonce_id: annonceId }
      success: function (response) {
-    if (response.success) { alert("Réservation réussie!");
-                           chargerAnnonces();
-                           } else {alert("Erreur: " + response.message);   }
+            if (response.success) {
+                alert("Réservation réussie!");
+                chargerAnnonces();
+            } else { alert("Erreur: " + response.message); }
         },
-  error: function () { alert("Erreur de connexion");}
+        error: function () { alert("Erreur de connexion"); }
     });
 }
-function chargerMesReservations() {let user = JSON.parse(localStorage.getItem("user"));
-                                    if (!user) return;
-            $.ajax({ url: getBaseUrl() + "mes_reservations.php", type: "GET", data: { user_id: user.id },
-                      success: function (response) {
-                     if (response.success) {afficherReservations(response.reservations);}
-                                                    },
- error: function () { $(".reservations-grid").html("<p>Erreur de chargement</p>");
+function chargerMesReservations() {
+    let user = JSON.parse(localStorage.getItem("user"));
+    if (!user) return;
+    $.ajax({
+        url: getBaseUrl() + "mes_reservations.php", type: "GET", data: { user_id: user.id },
+        success: function (response) {
+            if (response.success) { afficherReservations(response.reservations); }
+        },
+        error: function () {
+            $(".reservations-grid").html("<p>Erreur de chargement</p>");
         }
     });
 }
 function afficherReservations(reservations) {
-   let html = "";
-  if (reservations.length === 0) {
-      html = `<div style="text-align:center; padding:50px; grid-column:1/-1;">
+    let html = "";
+    if (reservations.length === 0) {
+        html = `<div style="text-align:center; padding:50px; grid-column:1/-1;">
       <ion-icon name="basket-outline" style="font-size:4rem; color:#ccc;"></ion-icon>
       <h3 style="margin:20px 0;">Aucune réservation</h3>
       <a href="annonces.html" class="btn" style="display:inline-block; text-decoration:none;">Voir les annonces</a>
       </div>`;
-     } else {reservations.forEach(function (res) {
-      let statusText = res.statut === "en_attente" ? "En attente" : "Confirmée";
-    let statusClass = res.statut === "en_attente" ? "status-pending" : "status-confirmed";
-     html += `
+    } else {
+        reservations.forEach(function (res) {
+            html += `
      <div class="card">
       <div class="card-img">
        <img src="${res.image_url}" alt="${res.titre}">
-       <span class="status-badge ${statusClass}">${statusText}</span>
        </div>
          <div class="card-body">
          <h3>${res.titre}</h3>
@@ -122,11 +138,13 @@ function afficherReservations(reservations) {
           <p class="res-loc"><ion-icon name="location-outline"></ion-icon> ${res.wilaya}</p>
            <div class="card-footer">
            <span class="date">Réservé le ${formaterDateComplete(res.date_reservation)}</span>
+           <button class="cancel-btn" onclick="annulerCommande(${res.id})">Annuler la commande</button>
              </div>
                     </div>
-                </div>; });
+                </div>`;
+        });
     }
-  $(".reservations-grid").html(html);
+    $(".reservations-grid").html(html);
 }
 function mettreAJourNavbar() {
     let user = JSON.parse(localStorage.getItem("user"));
@@ -138,11 +156,12 @@ function mettreAJourNavbar() {
             menuLinks += <li><a href="mes-reservations.html">Mes Réservations</a></li>;
         } else if (user.type === 'restaurant') {
             menuLinks += `
-                <li><a href="mes-annonces.html">Mes Annonces</a></li>
-                <li><a href="ajouter.html">Publier</a></li>;} }
-   $(".nav-links ul").html(menuLinks + '<li class="nav-account"></li>');
-    if (user) {
-        let profilHtml = `
+        < li > <a href="mes-annonces.html">Mes Annonces</a></li>
+            <li><a href="ajouter.html">Publier</a></li>;
+} }
+$(".nav-links ul").html(menuLinks + '<li class="nav-account"></li>');
+if (user) {
+    let profilHtml = `
             <div class="profil-dropdown">
                 <button class="login-btn profil-btn">
                     <ion-icon name="person-circle-outline"></ion-icon> ${user.nom}
