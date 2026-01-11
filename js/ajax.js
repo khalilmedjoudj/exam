@@ -146,6 +146,30 @@ function afficherReservations(reservations) {
     }
     $(".reservations-grid").html(html);
 }
+function annulerCommande(reservationId) {
+    let user = JSON.parse(localStorage.getItem("user"));
+    if (!user) {
+        alert("Vous devez être connecté.");
+        return;
+    }
+    if (!confirm("Voulez-vous vraiment annuler cette commande?")) return;
+    $.ajax({
+        url: getBaseUrl() + "annuler_reservation.php",
+        type: "POST",
+        data: { user_id: user.id, reservation_id: reservationId },
+        success: function (response) {
+            if (response.success) {
+                alert("Commande annulée avec succès!");
+                chargerMesReservations();
+            } else {
+                alert("Erreur: " + response.message);
+            }
+        },
+        error: function () {
+            alert("Erreur de connexion");
+        }
+    });
+}
 function mettreAJourNavbar() {
     let user = JSON.parse(localStorage.getItem("user"));
     let menuLinks = `
