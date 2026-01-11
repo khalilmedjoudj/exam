@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,12 +9,23 @@
     <link rel="stylesheet" href="css/style.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <style>
-        .status-pending {
-            background: orange !important;
+        .cancel-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
         }
-        .status-confirmed {
-            background: forestgreen !important;
+
+        .cancel-btn:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226);
+            transform: translateY(-2px);
         }
+
         .empty-message {
             text-align: center;
             padding: 60px 20px;
@@ -21,20 +33,24 @@
             border-radius: 20px;
             margin-top: 20px;
         }
+
         .empty-message ion-icon {
             font-size: 4rem;
             color: #ccc;
         }
+
         .empty-message h3 {
             margin: 20px 0 10px;
             color: #333;
         }
+
         .empty-message p {
             color: #666;
             margin-bottom: 20px;
         }
     </style>
 </head>
+
 <body style="background: #f4f7f6;">
     <nav class="navbar" style="background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
         <a href="index.html" class="logo">
@@ -49,32 +65,33 @@
         <div class="container">
             <h2 class="title-section">Mes Réservations</h2>
             <div id="message-login" style="display:none;">
-                   <div class="empty-message">
+                <div class="empty-message">
                     <ion-icon name="log-in-outline"></ion-icon>
-                        <h3>Connexion requise</h3>
-                       <p>Vous devez être connecté pour voir vos réservations</p>
-  <a href="index.html" class="btn"style="display:inline-block; text-decoration:none; padding:15px 40px;">Se connecter</a>
-                        </div>
+                    <h3>Connexion requise</h3>
+                    <p>Vous devez être connecté pour voir vos réservations</p>
+                    <a href="index.html" class="btn"
+                        style="display:inline-block; text-decoration:none; padding:15px 40px;">Se connecter</a>
                 </div>
+            </div>
             <div id="message-restaurant" style="display:none;">
                 <div class="empty-message">
-                     <ion-icon name="business-outline"></ion-icon>
+                    <ion-icon name="business-outline"></ion-icon>
                     <h3>Espace Client</h3>
                     <p>Cette page est réservée aux clients. En tant que restaurant, vous pouvez publier des annonces.
                     </p>
                     <a href="ajouter.html" class="btn"
                         style="display:inline-block; text-decoration:none; padding:15px 40px;">Publier une annonce</a>
-                    </div>
+                </div>
             </div>
             <div class="reservations-grid annonces-grid" style="display:none;">
                 <p style="text-align:center; padding:50px;">Chargement de vos réservations...</p>
-                  </div>
+            </div>
         </div>
     </section>
-     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script src="js/ajax.js"></script>
-     <script>
-          $(document).ready(function () {
+    <script>
+        $(document).ready(function () {
             let user = JSON.parse(localStorage.getItem("user"));
             if (!user) {
                 $("#message-login").show();
@@ -90,5 +107,5 @@
         });
     </script>
 </body>
-</html>
 
+</html>
