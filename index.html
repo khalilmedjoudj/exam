@@ -1,12 +1,16 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BarakaFood - Accueil</title>
+    <meta name="description"
         content="BarakaFood - Rejoignez la communauté solidaire qui lutte contre le gaspillage alimentaire en Algérie.">
     <link rel="stylesheet" href="css/style.css">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
+
 <body>
     <header>
         <nav class="navbar">
@@ -15,21 +19,24 @@
             </a>
             <div class="nav-links">
                 <ul>
+                   
                 </ul>
             </div>
         </nav>
+
         <div class="center-text">
-             <h1><ion-icon name="fast-food"></ion-icon> BarakaFood</h1> 
-             <p> Partageons au lieu de jeter. </p>
-             <p> Rejoignez la communité solidaire qui lutte contre le gaspillage alimentaire en Algérie.</p>
-             <div class="search-group">
+            <h1><ion-icon name="fast-food"></ion-icon> BarakaFood</h1>
+            <p>Partageons au lieu de jeter.</p>
+            <p>Rejoignez la communauté solidaire qui lutte contre le gaspillage alimentaire en Algérie.</p>
+
+            <div class="search-group">
                 <div class="search-box">
                     <ion-icon name="search-outline"></ion-icon>
                     <input type="text" id="recherche" placeholder="Mot clé...">
                 </div>
                 <div class="search-box">
-                     <ion-icon name="location-outline"></ion-icon>
-                     <select id="wilaya">
+                    <ion-icon name="location-outline"></ion-icon>
+                    <select id="wilaya"
                         style="border:none; outline:none; background:transparent; width:100%; font-size:1rem;">
                         <option value="">Toutes les wilayas</option>
                         <option value="Adrar">01 - Adrar</option>
@@ -90,16 +97,21 @@
                         <option value="Djanet">56 - Djanet</option>
                         <option value="El M'Ghair">57 - El M'Ghair</option>
                         <option value="El Meniaa">58 - El Meniaa</option>
-                     </select>
+                    </select>
                 </div>
                 <button class="search-btn-main" id="btn-rechercher">Rechercher</button>
-             </div>
-             <p class="restaurant-link">
-                  Vous êtes Restaurant ? <a href="#" class="btn-publish">Publiez vos annonces</a>
-             </p>
+            </div>
+
+            <p class="restaurant-link">
+                Vous êtes Restaurant ? <a href="#" class="btn-publish">Publiez vos annonces</a>
+            </p>
         </div>
+
+        
         <div class="wrapper">
             <span class="icon-close"><ion-icon name="close-outline"></ion-icon></span>
+
+           
             <div class="form-box login">
                 <h2>Connexion</h2>
                 <form id="form-login">
@@ -113,6 +125,7 @@
                     </div>
                     <div class="rem">
                         <label><input type="checkbox"> Se souvenir de moi</label>
+                        <a href="#">Mot de passe oublié?</a>
                     </div>
                     <button type="submit" class="btn">Se connecter</button>
                     <div class="login-register">
@@ -120,6 +133,7 @@
                     </div>
                 </form>
             </div>
+          
             <div class="form-box register">
                 <h2>Inscription</h2>
                 <form id="form-register">
@@ -147,17 +161,26 @@
             </div>
         </div>
     </header>
+
+    
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    
     <script src="js/script.js"></script>
     <script src="js/ajax.js"></script>
+
     <script>
         $(document).ready(function () {
+           
+
+           
             $("#form-login").submit(function (e) {
                 e.preventDefault();
                 let email = $("#login-email").val();
                 let password = $("#login-password").val();
                 connecterUtilisateur(email, password);
             });
+
+           
             $("#form-register").submit(function (e) {
                 e.preventDefault();
                 let nom = $("#register-nom").val();
@@ -166,22 +189,34 @@
                 let type = $("input[name='type']:checked").val();
                 inscrireUtilisateur(nom, email, password, type);
             });
+
+            
             $("#btn-rechercher").off("click").on("click", function (e) {
                 e.preventDefault();
                 e.stopPropagation();
+
                 let recherche = $("#recherche").val().trim();
                 let wilaya = $("#wilaya").val();
+
                 console.log("Recherche:", recherche, "Wilaya:", wilaya);
+
+                
                 localStorage.setItem("recherche", recherche);
                 localStorage.setItem("wilaya", wilaya);
+
+                
                 window.location.href = "annonces.html";
             });
+
+            
             $("#recherche").keypress(function (e) {
                 if (e.which == 13) {
                     e.preventDefault();
                     $("#btn-rechercher").click();
                 }
             });
+
+           
             $("#wilaya").keypress(function (e) {
                 if (e.which == 13) {
                     e.preventDefault();
@@ -190,6 +225,6 @@
             });
         });
     </script>
-    
 </body>
+
 </html>
