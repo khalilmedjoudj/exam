@@ -19,7 +19,7 @@
             </a>
             <div class="nav-links">
                 <ul>
-                   
+                    <!-- Menu généré dynamiquement par ajax.js -->
                 </ul>
             </div>
         </nav>
@@ -107,11 +107,14 @@
             </p>
         </div>
 
-        
+        <!-- ===== OVERLAY ===== -->
+        <div class="wrapper-overlay"></div>
+
+        <!-- ===== POPUP LOGIN ===== -->
         <div class="wrapper">
             <span class="icon-close"><ion-icon name="close-outline"></ion-icon></span>
 
-           
+            <!-- Formulaire Login -->
             <div class="form-box login">
                 <h2>Connexion</h2>
                 <form id="form-login">
@@ -125,7 +128,6 @@
                     </div>
                     <div class="rem">
                         <label><input type="checkbox"> Se souvenir de moi</label>
-                        <a href="#">Mot de passe oublié?</a>
                     </div>
                     <button type="submit" class="btn">Se connecter</button>
                     <div class="login-register">
@@ -133,7 +135,8 @@
                     </div>
                 </form>
             </div>
-          
+
+            <!-- Formulaire Register -->
             <div class="form-box register">
                 <h2>Inscription</h2>
                 <form id="form-register">
@@ -162,17 +165,17 @@
         </div>
     </header>
 
-    
+    <!-- Ionicons -->
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
-    
+    <!-- Nos scripts -->
     <script src="js/script.js"></script>
     <script src="js/ajax.js"></script>
 
     <script>
         $(document).ready(function () {
-           
+            // ===== GESTION DES FORMULAIRES =====
 
-           
+            // Formulaire de connexion
             $("#form-login").submit(function (e) {
                 e.preventDefault();
                 let email = $("#login-email").val();
@@ -180,7 +183,7 @@
                 connecterUtilisateur(email, password);
             });
 
-           
+            // Formulaire d'inscription
             $("#form-register").submit(function (e) {
                 e.preventDefault();
                 let nom = $("#register-nom").val();
@@ -190,7 +193,7 @@
                 inscrireUtilisateur(nom, email, password, type);
             });
 
-            
+            // Bouton rechercher - sauvegarder et rediriger
             $("#btn-rechercher").off("click").on("click", function (e) {
                 e.preventDefault();
                 e.stopPropagation();
@@ -200,15 +203,15 @@
 
                 console.log("Recherche:", recherche, "Wilaya:", wilaya);
 
-                
+                // Sauvegarder les critères
                 localStorage.setItem("recherche", recherche);
                 localStorage.setItem("wilaya", wilaya);
 
-                
+                // Rediriger vers la page annonces
                 window.location.href = "annonces.html";
             });
 
-            
+            // Recherche en appuyant sur Entrée dans le champ recherche
             $("#recherche").keypress(function (e) {
                 if (e.which == 13) {
                     e.preventDefault();
@@ -216,7 +219,7 @@
                 }
             });
 
-           
+            // Permettre aussi de changer la wilaya avec les flèches et Enter
             $("#wilaya").keypress(function (e) {
                 if (e.which == 13) {
                     e.preventDefault();
