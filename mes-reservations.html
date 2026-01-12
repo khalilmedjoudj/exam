@@ -19,11 +19,17 @@
             font-weight: 600;
             font-size: 0.85rem;
             transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
         }
 
         .cancel-btn:hover {
             background: linear-gradient(135deg, #c0392b, #a93226);
             transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.4);
+        }
+
+        .cancel-btn:active {
+            transform: translateY(0);
         }
 
         .empty-message {
@@ -89,9 +95,81 @@
         </div>
     </section>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script src="js/script.js"></script>
     <script src="js/ajax.js"></script>
+
+    <!-- ===== OVERLAY ===== -->
+    <div class="wrapper-overlay"></div>
+
+    <!-- ===== POPUP LOGIN ===== -->
+    <div class="wrapper">
+        <span class="icon-close"><ion-icon name="close-outline"></ion-icon></span>
+        <div class="form-box login">
+            <h2>Connexion</h2>
+            <form id="form-login">
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                    <input type="email" id="login-email" required><label>Email</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                    <input type="password" id="login-password" required><label>Mot de passe</label>
+                </div>
+                <div class="rem">
+                    <label><input type="checkbox"> Se souvenir de moi</label>
+                </div>
+                <button type="submit" class="btn">Se connecter</button>
+                <div class="login-register">
+                    <p>Pas de compte? <a href="#" class="register-link">S'inscrire</a></p>
+                </div>
+            </form>
+        </div>
+        <div class="form-box register">
+            <h2>Inscription</h2>
+            <form id="form-register">
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="person"></ion-icon></span>
+                    <input type="text" id="register-nom" required><label>Nom complet</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                    <input type="email" id="register-email" required><label>Email</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                    <input type="password" id="register-password" required><label>Mot de passe</label>
+                </div>
+                <div class="rem">
+                    <label><input type="radio" name="type" value="client" checked> Client</label>
+                    <label><input type="radio" name="type" value="restaurant"> Restaurant</label>
+                </div>
+                <button type="submit" class="btn">S'inscrire</button>
+                <div class="login-register">
+                    <p>Déjà un compte? <a href="#" class="login-link">Se connecter</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function () {
+            // Login form handler
+            $("#form-login").submit(function (e) {
+                e.preventDefault();
+                let email = $("#login-email").val();
+                let password = $("#login-password").val();
+                connecterUtilisateur(email, password);
+            });
+            // Register form handler
+            $("#form-register").submit(function (e) {
+                e.preventDefault();
+                let nom = $("#register-nom").val();
+                let email = $("#register-email").val();
+                let password = $("#register-password").val();
+                let type = $("input[name='type']:checked").val();
+                inscrireUtilisateur(nom, email, password, type);
+            });
+
             let user = JSON.parse(localStorage.getItem("user"));
             if (!user) {
                 $("#message-login").show();

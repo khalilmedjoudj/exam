@@ -1,4 +1,6 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,33 +12,40 @@
         .status-disponible {
             background: forestgreen !important;
         }
+
         .status-indisponible {
             background: #999 !important;
         }
+
         .status-reserve {
             background: orange !important;
         }
-         .card-stats{
+
+        .card-stats {
             display: flex;
             gap: 15px;
             margin-top: 10px;
             padding-top: 10px;
             border-top: 1px solid #eee;
-         }
-         .card-stats span {
-             font-size: 0.8rem;
+        }
+
+        .card-stats span {
+            font-size: 0.8rem;
             color: #666;
-         }
-         .card-stats ion-icon{
+        }
+
+        .card-stats ion-icon {
             color: forestgreen;
-         }
-         .card-actions {
+        }
+
+        .card-actions {
             display: flex;
             gap: 10px;
             margin-top: 15px;
             flex-wrap: wrap;
-         }
-         .btn-small {
+        }
+
+        .btn-small {
             padding: 8px 15px;
             border: none;
             border-radius: 8px;
@@ -47,27 +56,33 @@
             display: flex;
             align-items: center;
             gap: 5px;
-         }
-          .btn-toggle{
-             background: #2196F3;
+        }
+
+        .btn-toggle {
+            background: #2196F3;
             color: white;
-          }
-            .btn-toggle:hover{
-                background: #1976D2;
-            }
-             .btn-delete{
-                background: #f44336;
+        }
+
+        .btn-toggle:hover {
+            background: #1976D2;
+        }
+
+        .btn-delete {
+            background: #f44336;
             color: white;
-             }
-             .btn-delete:hover{
-                background: #d32f2f;
-             }
-              .btn-toggle ion-icon,
+        }
+
+        .btn-delete:hover {
+            background: #d32f2f;
+        }
+
+        .btn-toggle ion-icon,
         .btn-delete ion-icon {
             font-size: 1rem;
         }
     </style>
 </head>
+
 <body style="background: #f4f7f6;">
     <nav class="navbar" style="background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
         <a href="index.html" class="logo">
@@ -114,9 +129,81 @@
         </div>
     </section>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script src="js/script.js"></script>
     <script src="js/ajax.js"></script>
+
+    <!-- ===== OVERLAY ===== -->
+    <div class="wrapper-overlay"></div>
+
+    <!-- ===== POPUP LOGIN ===== -->
+    <div class="wrapper">
+        <span class="icon-close"><ion-icon name="close-outline"></ion-icon></span>
+        <div class="form-box login">
+            <h2>Connexion</h2>
+            <form id="form-login">
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                    <input type="email" id="login-email" required><label>Email</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                    <input type="password" id="login-password" required><label>Mot de passe</label>
+                </div>
+                <div class="rem">
+                    <label><input type="checkbox"> Se souvenir de moi</label>
+                </div>
+                <button type="submit" class="btn">Se connecter</button>
+                <div class="login-register">
+                    <p>Pas de compte? <a href="#" class="register-link">S'inscrire</a></p>
+                </div>
+            </form>
+        </div>
+        <div class="form-box register">
+            <h2>Inscription</h2>
+            <form id="form-register">
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="person"></ion-icon></span>
+                    <input type="text" id="register-nom" required><label>Nom complet</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="mail"></ion-icon></span>
+                    <input type="email" id="register-email" required><label>Email</label>
+                </div>
+                <div class="input-box">
+                    <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+                    <input type="password" id="register-password" required><label>Mot de passe</label>
+                </div>
+                <div class="rem">
+                    <label><input type="radio" name="type" value="client" checked> Client</label>
+                    <label><input type="radio" name="type" value="restaurant"> Restaurant</label>
+                </div>
+                <button type="submit" class="btn">S'inscrire</button>
+                <div class="login-register">
+                    <p>Déjà un compte? <a href="#" class="login-link">Se connecter</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function () {
+            // Login form handler
+            $("#form-login").submit(function (e) {
+                e.preventDefault();
+                let email = $("#login-email").val();
+                let password = $("#login-password").val();
+                connecterUtilisateur(email, password);
+            });
+            // Register form handler
+            $("#form-register").submit(function (e) {
+                e.preventDefault();
+                let nom = $("#register-nom").val();
+                let email = $("#register-email").val();
+                let password = $("#register-password").val();
+                let type = $("input[name='type']:checked").val();
+                inscrireUtilisateur(nom, email, password, type);
+            });
+
             let user = JSON.parse(localStorage.getItem("user"));
             if (!user) {
                 $("#message-text").text("Vous devez être connecté pour voir vos annonces");
@@ -172,7 +259,7 @@
                     html += `
                         <div class="card" data-id="${a.id}">
                             <div class="card-img">
-                                <img src="${a.image_url}" alt="${a.titre}">
+                                <img src="${a.image_url}" alt="${a.titre}" onerror="this.onerror=null; this.src='pic/no-image.svg';">
                                 <span class="status-badge ${statusClass}">${statusText}</span>
                             </div>
                             <div class="card-body">
@@ -212,7 +299,7 @@
                 success: function (response) {
                     if (response.success) {
                         alert("Statut mis à jour !");
-                        chargerMesAnnonces(); 
+                        chargerMesAnnonces();
                     } else {
                         alert("Erreur: " + response.message);
                     }
@@ -237,7 +324,7 @@
                 success: function (response) {
                     if (response.success) {
                         alert("Annonce supprimée !");
-                        chargerMesAnnonces(); 
+                        chargerMesAnnonces();
                     } else {
                         alert("Erreur: " + response.message);
                     }
@@ -248,6 +335,6 @@
             });
         }
     </script>
-    
 </body>
+
 </html>
