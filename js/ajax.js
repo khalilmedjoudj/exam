@@ -5,7 +5,9 @@ function getBaseUrl() {
 }
 function inscrireUtilisateur(nom, email, password, type) {
     $.ajax({
-        url: getBaseUrl() + "inscription.php", type: "POST", data: { nom, email, password, type },
+        url: getBaseUrl() + "inscription.php",
+        type: "POST",
+        data: { nom, email, password, type },
         success: function (response) {
             if (response.success) {
                 alert("Inscription réussie! Vous pouvez maintenant vous connecter.");
@@ -14,12 +16,16 @@ function inscrireUtilisateur(nom, email, password, type) {
                 alert("Erreur: " + response.message);
             }
         },
-        error: function () { alert("Erreur de connexion au serveur"); }
+        error: function () {
+            alert("Erreur de connexion au serveur");
+        }
     });
 }
 function connecterUtilisateur(email, password) {
     $.ajax({
-        url: getBaseUrl() + "connexion.php", type: "POST", data: { email, password },
+        url: getBaseUrl() + "connexion.php",
+        type: "POST",
+        data: { email, password },
         success: function (response) {
             if (response.success) {
                 localStorage.setItem("user", JSON.stringify(response.user));
@@ -37,7 +43,9 @@ function connecterUtilisateur(email, password) {
 }
 function chargerAnnonces(recherche, wilaya) {
     $.ajax({
-        url: getBaseUrl() + "get_annonces.php", type: "GET", data: { recherche: recherche  "", wilaya: wilaya  "" },
+        url: getBaseUrl() + "get_annonces.php",
+        type: "GET",
+        data: { recherche: recherche || "", wilaya: wilaya || "" },
         success: function (response) {
             if (response.success) {
                 afficherAnnonces(response.annonces);
@@ -45,7 +53,9 @@ function chargerAnnonces(recherche, wilaya) {
                 $(".annonces-grid").html("<p style='text-align:center; padding:50px;'>Erreur de chargement</p>");
             }
         },
-        error: function () { $(".annonces-grid").html("<p style='text-align:center; padding:50px;'>Erreur de connexion</p>"); }
+        error: function () {
+            $(".annonces-grid").html("<p style='text-align:center; padding:50px;'>Erreur de connexion</p>");
+        }
     });
 }
 function afficherAnnonces(annonces) {
@@ -57,21 +67,21 @@ function afficherAnnonces(annonces) {
         annonces.forEach(function (annonce) {
             let boutonReserver = "";
             if (!user || user.type === "client") {
-                boutonReserver = <button class="reserve-btn" onclick="reserverAnnonce(${annonce.id})">Réserver</button>;
+                boutonReserver = `<button class="reserve-btn" onclick="reserverAnnonce(${annonce.id})">Réserver</button>`;
             }
             html += `
-                                              <div class="card">
-                                                                  <div class="card-img">
-                                                                              <img src="${annonce.image_url}" alt="${annonce.titre}">
-                                                                              <span class="status-badge">Disponible</span>
-                                                                              </div>
-                                                                              <div class="card-body">
-                                                                               <span class="category">${annonce.categorie}</span>
-                                                                               <h3>${annonce.titre}</h3>
-                   <p class="res-name"><ion-icon name="business-outline"></ion-icon> ${annonce.restaurant_nom}</p>
-                   <p class="res-loc"><ion-icon name="location-outline"></ion-icon> ${annonce.wilaya}, ${annonce.adresse}</p>
-                   <div class="card-footer">
-                           <span class="date">${formaterDate(annonce.date_creation)}</span>
+                <div class="card">
+                    <div class="card-img">
+                        <img src="${annonce.image_url}" alt="${annonce.titre}" onerror="this.onerror=null; this.src='pic/no-image.svg';">
+                        <span class="status-badge">Disponible</span>
+                    </div>
+                    <div class="card-body">
+                        <span class="category">${annonce.categorie}</span>
+                        <h3>${annonce.titre}</h3>
+                        <p class="res-name"><ion-icon name="business-outline"></ion-icon> ${annonce.restaurant_nom}</p>
+                        <p class="res-loc"><ion-icon name="location-outline"></ion-icon> ${annonce.wilaya}, ${annonce.adresse}</p>
+                        <div class="card-footer">
+                            <span class="date">${formaterDate(annonce.date_creation)}</span>
                             ${boutonReserver}
                         </div>
                     </div>
@@ -94,23 +104,33 @@ function reserverAnnonce(annonceId) {
     }
     if (!confirm("Voulez-vous réserver ce plat?")) return;
     $.ajax({
-        url: getBaseUrl() + "reserver.php", type: "POST", data: { user_id: user.id, annonce_id: annonceId }
-     success: function (response) {
+        url: getBaseUrl() + "reserver.php",
+        type: "POST",
+        data: { user_id: user.id, annonce_id: annonceId },
+        success: function (response) {
             if (response.success) {
                 alert("Réservation réussie!");
                 chargerAnnonces();
-            } else { alert("Erreur: " + response.message); }
+            } else {
+                alert("Erreur: " + response.message);
+            }
         },
-        error: function () { alert("Erreur de connexion"); }
+        error: function () {
+            alert("Erreur de connexion");
+        }
     });
 }
 function chargerMesReservations() {
     let user = JSON.parse(localStorage.getItem("user"));
     if (!user) return;
     $.ajax({
-        url: getBaseUrl() + "mes_reservations.php", type: "GET", data: { user_id: user.id },
+        url: getBaseUrl() + "mes_reservations.php",
+        type: "GET",
+        data: { user_id: user.id },
         success: function (response) {
-            if (response.success) { afficherReservations(response.reservations); }
+            if (response.success) {
+                afficherReservations(response.reservations);
+            }
         },
         error: function () {
             $(".reservations-grid").html("<p>Erreur de chargement</p>");
@@ -121,27 +141,28 @@ function afficherReservations(reservations) {
     let html = "";
     if (reservations.length === 0) {
         html = `<div style="text-align:center; padding:50px; grid-column:1/-1;">
-      <ion-icon name="basket-outline" style="font-size:4rem; color:#ccc;"></ion-icon>
-      <h3 style="margin:20px 0;">Aucune réservation</h3>
-      <a href="annonces.html" class="btn" style="display:inline-block; text-decoration:none;">Voir les annonces</a>
-      </div>`;
+            <ion-icon name="basket-outline" style="font-size:4rem; color:#ccc;"></ion-icon>
+            <h3 style="margin:20px 0;">Aucune réservation</h3>
+            <a href="annonces.html" class="btn" style="display:inline-block; text-decoration:none;">Voir les annonces</a>
+        </div>`;
     } else {
         reservations.forEach(function (res) {
             html += `
-     <div class="card">
-      <div class="card-img">
-       <img src="${res.image_url}" alt="${res.titre}">
-       </div>
-         <div class="card-body">
-         <h3>${res.titre}</h3>
-         <p class="res-name"><ion-icon name="business-outline"></ion-icon> ${res.restaurant_nom}</p>
-          <p class="res-loc"><ion-icon name="location-outline"></ion-icon> ${res.wilaya}</p>
-           <div class="card-footer">
-           <span class="date">Réservé le ${formaterDateComplete(res.date_reservation)}</span>
-           <button class="cancel-btn" onclick="annulerCommande(${res.id})">Annuler la commande</button>
-             </div>
+                <div class="card">
+                    <div class="card-img">
+                        <img src="${res.image_url}" alt="${res.titre}" onerror="this.onerror=null; this.src='pic/no-image.svg';">
                     </div>
-                </div>`;
+                    <div class="card-body">
+                        <h3>${res.titre}</h3>
+                        <p class="res-name"><ion-icon name="business-outline"></ion-icon> ${res.restaurant_nom}</p>
+                        <p class="res-loc"><ion-icon name="location-outline"></ion-icon> ${res.wilaya}</p>
+                        <div class="card-footer">
+                            <span class="date">Réservé le ${formaterDateComplete(res.date_reservation)}</span>
+                            <button class="cancel-btn" onclick="annulerCommande(${res.id})">Annuler la commande</button>
+                        </div>
+                    </div>
+                </div>
+            `;
         });
     }
     $(".reservations-grid").html(html);
@@ -174,18 +195,21 @@ function mettreAJourNavbar() {
     let user = JSON.parse(localStorage.getItem("user"));
     let menuLinks = `
         <li><a href="index.html">Accueil</a></li>
-        <li><a href="annonces.html">Annonces</a></li>;
+        <li><a href="annonces.html">Annonces</a></li>
+    `;
     if (user) {
         if (user.type === 'client') {
-            menuLinks += <li><a href="mes-reservations.html">Mes Réservations</a></li>;
+            menuLinks += `<li><a href="mes-reservations.html">Mes Réservations</a></li>`;
         } else if (user.type === 'restaurant') {
             menuLinks += `
-        < li > <a href="mes-annonces.html">Mes Annonces</a></li>
-            <li><a href="ajouter.html">Publier</a></li>;
-} }
-$(".nav-links ul").html(menuLinks + '<li class="nav-account"></li>');
-if (user) {
-    let profilHtml = `
+                <li><a href="mes-annonces.html">Mes Annonces</a></li>
+                <li><a href="ajouter.html">Publier</a></li>
+            `;
+        }
+    }
+    $(".nav-links ul").html(menuLinks + '<li class="nav-account"></li>');
+    if (user) {
+        let profilHtml = `
             <div class="profil-dropdown">
                 <button class="login-btn profil-btn">
                     <ion-icon name="person-circle-outline"></ion-icon> ${user.nom}
@@ -203,7 +227,8 @@ if (user) {
                         <ion-icon name="log-out-outline"></ion-icon> Se déconnecter
                     </button>
                 </div>
-            </div>;
+            </div>
+        `;
         $(".nav-account").html(profilHtml);
         $(document).off("click", ".profil-btn").on("click", ".profil-btn", function (e) {
             e.stopPropagation();
@@ -216,7 +241,9 @@ if (user) {
         $(".nav-account").html('<button type="button" class="login-btn">Login</button>');
         $(document).off("click", ".nav-account .login-btn").on("click", ".nav-account .login-btn", function (e) {
             e.preventDefault();
-            $(".wrapper").addClass("show"); });
+            $(".wrapper").addClass("show");
+            $(".wrapper-overlay").addClass("show");
+        });
     }
 }
 function deconnexion() {
@@ -242,4 +269,3 @@ $(document).ready(function () {
         chargerMesReservations();
     }
 });
-
