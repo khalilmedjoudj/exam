@@ -12,7 +12,7 @@ $uploadDir = '../uploads/';
 if (!file_exists($uploadDir)) {
     mkdir($uploadDir, 0755, true);
 }
-if (!isset($_FILES['image'])  $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+if (!isset($_FILES['image']) || $_FILES['image']['error'] !== UPLOAD_ERR_OK) {
     $errorMessages = [
         UPLOAD_ERR_INI_SIZE => "Fichier trop volumineux (limite serveur)",
         UPLOAD_ERR_FORM_SIZE => "Fichier trop volumineux",
@@ -64,7 +64,7 @@ if ($imageInfo === false) {
     ]);
     exit;
 }
-if ($imageInfo[0] > 4000  $imageInfo[1] > 4000) {
+if ($imageInfo[0] > 4000 || $imageInfo[1] > 4000) {
     echo json_encode([
         "success" => false,
         "message" => "Image trop grande (max 4000x4000 pixels)"
