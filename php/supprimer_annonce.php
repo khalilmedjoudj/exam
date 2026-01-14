@@ -10,7 +10,7 @@ if (!checkRateLimit('supprimer_annonce', 20, 3600)) {
 }
 $annonce_id = intval($_POST['annonce_id'] ?? 0);
 $user_id = intval($_POST['user_id'] ?? 0);
-if ($annonce_id <= 0  $user_id <= 0) {
+if ($annonce_id <= 0 || $user_id <= 0) {
     echo json_encode([
         "success" => false,
         "message" => "Données invalides"
@@ -21,7 +21,7 @@ try {
     $stmt = $pdo->prepare("SELECT user_id, image_url FROM annonces WHERE id = ?");
     $stmt->execute([$annonce_id]);
     $annonce = $stmt->fetch();
-    if (!$annonce  $annonce['user_id'] != $user_id) {
+    if (!$annonce || $annonce['user_id'] != $user_id) {
         echo json_encode([
             "success" => false,
             "message" => "Cette annonce ne vous appartient pas"

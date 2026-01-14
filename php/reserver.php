@@ -10,7 +10,7 @@ if (!checkRateLimit('reserver', 20, 3600)) {
 }
 $user_id = intval($_POST['user_id'] ?? 0);
 $annonce_id = intval($_POST['annonce_id'] ?? 0);
-if ($user_id <= 0  $annonce_id <= 0) {
+if ($user_id <= 0 || $annonce_id <= 0) {
     echo json_encode([
         "success" => false,
         "message" => "Données invalides"
@@ -21,7 +21,7 @@ try {
     $stmt = $pdo->prepare("SELECT type FROM users WHERE id = ?");
     $stmt->execute([$user_id]);
     $user = $stmt->fetch();
-    if (!$user  $user['type'] !== 'client') {
+    if (!$user || $user['type'] !== 'client') {
         echo json_encode([
             "success" => false,
             "message" => "Seuls les clients peuvent réserver des plats"
