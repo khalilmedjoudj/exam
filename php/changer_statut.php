@@ -18,7 +18,7 @@ if ($annonce_id <= 0 || $user_id <= 0) {
     ]);
     exit;
 }
-if (!in_array($nouveau_statut, ['disponible', 'indisponible'])) {
+if (!in_array($nouveau_statut, ['disponible', 'reserve', 'termine'])) {
     echo json_encode([
         "success" => false,
         "message" => "Statut invalide"
